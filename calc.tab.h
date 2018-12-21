@@ -45,9 +45,10 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    IDENTIFIER = 258,
-    NUM = 259,
-    QUIT = 260
+    VAL_INTEGER = 258,
+    IDENTIFIER = 259,
+    NUM = 260,
+    QUIT = 261
   };
 #endif
 
@@ -56,13 +57,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 37 "calc.y" /* yacc.c:1909  */
+#line 38 "calc.y" /* yacc.c:1909  */
 
   float f;
   double d;
   identifier id;
 
-#line 66 "calc.tab.h" /* yacc.c:1909  */
+#line 67 "calc.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

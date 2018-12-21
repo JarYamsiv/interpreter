@@ -1,8 +1,5 @@
-all:lex yacc
+all:
+	yacc -d calc.y
+	lex	calc.l
 	gcc lex.yy.c y.tab.c -o calc
-
-lex:
-	flex calc.l
-
-yacc:
-	bison -d calc.y
+	

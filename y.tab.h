@@ -46,25 +46,27 @@ extern int yydebug;
   enum yytokentype
   {
     IDENTIFIER = 258,
-    NUM = 259,
-    QUIT = 260
+    CONST = 259,
+    FUNCTIONCALL = 260,
+    QUIT = 261
   };
 #endif
 /* Tokens.  */
 #define IDENTIFIER 258
-#define NUM 259
-#define QUIT 260
+#define CONST 259
+#define FUNCTIONCALL 260
+#define QUIT 261
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 28 "calc.y" /* yacc.c:1909  */
+#line 19 "calc.y" /* yacc.c:1909  */
 
-  float f;
+  identifier id;
 
-#line 68 "y.tab.h" /* yacc.c:1909  */
+#line 70 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

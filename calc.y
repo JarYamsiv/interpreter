@@ -1,84 +1,150 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "headers/struct_definitions.h"
 extern int yylex();
 void yyerror(char *msg);
 
-//================================CUSTOM DEFINED STRUCTURES=================================
-
-typedef union id_val{
-  int i;
-  float f;
-  double d;
-  char c;
-}id_val;
-
-typedef enum id_type
-{
-  INT,FLOAT,DOUBLE,CHAR
-}id_type;
-
-typedef struct Identifier
-{
-  id_type type;
-  char name[50];
-  id_val x;
-}identifier;
-
-
-//========================================END===============================================
+//================================ERRORS================================
+#define ERROR_TYPE_ERROR -66001
+//===================================END================================
 
 
 %}
 
 
 
+
+
 %union {
-  float f;
-  double d;
   identifier id;
 }
 
-%token IDENTIFIER
+%token <id> IDENTIFIER CONST
 
-%token <f> NUM
-%type <f> EXPR T F
+%type <id> EXPR T F
 
-%token QUIT
+%token FUNCTIONCALL
+
+%token QUIT LEX_ERROR_TOKEN
 
 %%
 
-S : EXPR '\n'             {printf(" %f\n", $1);return 0;}
+S : EXPR '\n'             {
+
+    if($<id.type>$==TYPE_INT)printf(" %d\n", $<id.x.i>1);
+    if($<id.type>$==TYPE_FLOAT)printf(" %f\n", $<id.x.f>1);
+    return 0; 
+
+    }
+
   | QUIT '\n'             {return -1;}
-  | IDENTIFIER '\n'       {printf("identifier found\n");return 0;}
+
+  | IDENTIFIER '\n'       {
+    printf("identifier found %s\n",$<id.name>$);return 0;
+    }
+
+  | IDENTIFIER '=' EXPR '\n'  {
+
+    if($<id.type>3==TYPE_INT){printf("%s assigned the value %d\n", $<id.name>1 , $<id.x.i>3 ); }
+    if($<id.type>3==TYPE_FLOAT){printf("%s assigned the value %f\n", $<id.name>1 , $<id.x.f>3 ); }
+    return 0;
+
+    }
+
+  | IDENTIFIER '(' ')'  '\n'      {printf("calling function %s\n",$<id.name>1);return 0;}
   ;
 
-EXPR : EXPR '+' T     {$$ = $1 + $3;}
-  | EXPR '-' T     {$$ = $1 - $3;}
-  | T           {$$ = $1;}
+
+
+EXPR : EXPR '+' T     {
+
+  if( $<id.type>1 == TYPE_INT && $<id.type>3 == TYPE_INT ){$<id.x.i>$ = $<id.x.i>1 + $<id.x.i>3; $<id.type>$ = TYPE_INT;}
+  else if( $<id.type>1 == TYPE_FLOAT && $<id.type>3 == TYPE_FLOAT ){$<id.x.f>$ = $<id.x.f>1 + $<id.x.f>3; $<id.type>$ = TYPE_FLOAT;}
+  else{return ERROR_TYPE_ERROR;}
+
+  }
+
+  | EXPR '-' T     {
+
+    if( $<id.type>1 == TYPE_INT && $<id.type>3 == TYPE_INT ){$<id.x.i>$ = $<id.x.i>1 - $<id.x.i>3; $<id.type>$ = TYPE_INT;}
+    else if( $<id.type>1 == TYPE_FLOAT && $<id.type>3 == TYPE_FLOAT ){$<id.x.f>$ = $<id.x.f>1 - $<id.x.f>3; $<id.type>$ = TYPE_FLOAT;}
+    else{return ERROR_TYPE_ERROR;}
+
+    }
+
+  | T           {
+
+    if( $<id.type>1 == TYPE_INT){$<id.x.i>$ = $<id.x.i>1; $<id.type>$ = TYPE_INT;}
+    if( $<id.type>1 == TYPE_FLOAT){$<id.x.f>$ = $<id.x.f>1; $<id.type>$ = TYPE_FLOAT;}
+
+    }
+
   ;
 
-T : T '*' F     {$$ = $1 * $3;}
-  | T '/' F     {$$ = $1 / $3;}
-  | F           {$$ = $1;}
+T : T '*' F     {
+  if( $<id.type>1 == TYPE_INT && $<id.type>3 == TYPE_INT ){$<id.x.i>$ = $<id.x.i>1 * $<id.x.i>3; $<id.type>$ = TYPE_INT;}
+  if( $<id.type>1 == TYPE_FLOAT && $<id.type>3 == TYPE_FLOAT ){$<id.x.f>$ = $<id.x.f>1 * $<id.x.f>3; $<id.type>$ = TYPE_FLOAT;}
+  else {return ERROR_TYPE_ERROR;}
+  }
+
+  | T '/' F     {
+    if( $<id.type>1 == TYPE_INT && $<id.type>3 == TYPE_INT ){$<id.x.i>$ = $<id.x.i>1 / $<id.x.i>3; $<id.type>$ = TYPE_INT;}
+    if( $<id.type>1 == TYPE_FLOAT && $<id.type>3 == TYPE_FLOAT ){$<id.x.f>$ = $<id.x.f>1 / $<id.x.f>3;$<id.type>$ = TYPE_FLOAT;}
+    }
+
+  | F           {
+    if( $<id.type>1 == TYPE_INT ){$<id.x.i>$ = $<id.x.i>1; $<id.type>$=TYPE_INT; }
+    if( $<id.type>1 == TYPE_FLOAT ){$<id.x.f>$ = $<id.x.f>1; $<id.type>$=TYPE_FLOAT; }
+    }
   ;
 
-F : '(' EXPR ')'   {$$ = $2;}
-  | '-' F       {$$ = -$2;}
-  | NUM         {$$ = $1;}
+F : '(' EXPR ')'   {
+  if( $<id.type>2 == TYPE_INT ){$<id.x.i>$ = $<id.x.i>2; $<id.type>$ = TYPE_INT;}
+  if( $<id.type>2 == TYPE_FLOAT ){$<id.x.f>$ = $<id.x.f>2; $<id.type>$ = TYPE_FLOAT;}
+  }
+
+  | '-' F       {
+    if( $<id.type>2 == TYPE_INT ){$<id.x.i>$ = $<id.x.i>2; $<id.type>$ = TYPE_INT;}
+    if( $<id.type>2 == TYPE_FLOAT ){$<id.x.f>$ = -$<id.x.f>2; $<id.type>$ = TYPE_FLOAT;}
+    }
+
+  | CONST         {
+    if( $<id.type>1 == TYPE_INT ){$<id.x.i>$ = $<id.x.i>1; $<id.type>$ = TYPE_INT;}
+    if( $<id.type>1 == TYPE_FLOAT ){$<id.x.f>$ = $<id.x.f>1; $<id.type>$ = TYPE_FLOAT;}
+    }
   ;
+
+
 
 %%
 void yyerror(char *msg) {
-    fprintf(stderr, "%s\n", msg);
-    exit(1);
+    fprintf(stdout, "%s\n", msg);
 }
 int main() {
+    int current_stats;
     while(1)
     {
       printf(">>> ");
-      if(yyparse()<0)break;
+      current_stats = yyparse();
+
+      if(current_stats<0)
+      {
+        switch (current_stats)
+        {
+          case ERROR_TYPE_ERROR:
+          {
+            printf("type error!!\n");
+            break;
+          }
+        }
+      }
+
+      if(current_stats==-1)
+      {
+        break;
+      }
+
     }
     printf(" bye!!\n");
     return 0;
