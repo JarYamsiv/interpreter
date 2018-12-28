@@ -45,10 +45,25 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    VAL_INTEGER = 258,
-    IDENTIFIER = 259,
-    NUM = 260,
-    QUIT = 261
+    IF = 258,
+    WHILE = 259,
+    FOR = 260,
+    AND = 261,
+    OR = 262,
+    NOT = 263,
+    EQ = 264,
+    GT = 265,
+    LT = 266,
+    GTE = 267,
+    LSE = 268,
+    NEQ = 269,
+    TRUE = 270,
+    FALSE = 271,
+    IDENTIFIER = 272,
+    CONST = 273,
+    FUNCTIONCALL = 274,
+    QUIT = 275,
+    LEX_ERROR_TOKEN = 276
   };
 #endif
 
@@ -57,13 +72,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 38 "calc.y" /* yacc.c:1909  */
+#line 39 "calc.y" /* yacc.c:1909  */
 
-  float f;
-  double d;
   identifier id;
+  condition_block cond_block;
 
-#line 67 "calc.tab.h" /* yacc.c:1909  */
+#line 81 "calc.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

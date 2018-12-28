@@ -1,0 +1,379 @@
+Terminals unused in grammar
+
+   IF
+   WHILE
+   FOR
+   FUNCTIONCALL
+   LEX_ERROR_TOKEN
+
+
+State 1 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: S $end
+
+    1 S: EXPR '\n'
+    2  | QUIT '\n'
+    3  | IDENTIFIER '\n'
+    4  | IDENTIFIER '=' EXPR '\n'
+    5  | IDENTIFIER '(' ')' '\n'
+
+    6 EXPR: EXPR '+' T
+    7     | EXPR '-' T
+    8     | T
+
+    9 T: T '*' F
+   10  | T '/' F
+   11  | F
+
+   12 F: '(' EXPR ')'
+   13  | '-' F
+   14  | CONST
+   15  | IDENTIFIER
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 1 2 3 4 5
+'(' (40) 5 12
+')' (41) 5 12
+'*' (42) 9
+'+' (43) 6
+'-' (45) 7 13
+'/' (47) 10
+'=' (61) 4
+error (256)
+IF (258)
+WHILE (259)
+FOR (260)
+IDENTIFIER (261) 3 4 5 15
+CONST (262) 14
+FUNCTIONCALL (263)
+QUIT (264) 2
+LEX_ERROR_TOKEN (265)
+
+
+Nonterminals, with rules where they appear
+
+$accept (19)
+    on left: 0
+S (20)
+    on left: 1 2 3 4 5, on right: 0
+EXPR (21)
+    on left: 6 7 8, on right: 1 4 6 7 12
+T (22)
+    on left: 9 10 11, on right: 6 7 8 9 10
+F (23)
+    on left: 12 13 14 15, on right: 9 10 11 13
+
+
+State 0
+
+    0 $accept: . S $end
+
+    IDENTIFIER  shift, and go to state 1
+    CONST       shift, and go to state 2
+    QUIT        shift, and go to state 3
+    '('         shift, and go to state 4
+    '-'         shift, and go to state 5
+
+    S     go to state 6
+    EXPR  go to state 7
+    T     go to state 8
+    F     go to state 9
+
+
+State 1
+
+    3 S: IDENTIFIER . '\n'
+    4  | IDENTIFIER . '=' EXPR '\n'
+    5  | IDENTIFIER . '(' ')' '\n'
+   15 F: IDENTIFIER .
+
+    '\n'  shift, and go to state 10
+    '='   shift, and go to state 11
+    '('   shift, and go to state 12
+
+    '\n'      [reduce using rule 15 (F)]
+    $default  reduce using rule 15 (F)
+
+
+State 2
+
+   14 F: CONST .
+
+    $default  reduce using rule 14 (F)
+
+
+State 3
+
+    2 S: QUIT . '\n'
+
+    '\n'  shift, and go to state 13
+
+
+State 4
+
+   12 F: '(' . EXPR ')'
+
+    IDENTIFIER  shift, and go to state 14
+    CONST       shift, and go to state 2
+    '('         shift, and go to state 4
+    '-'         shift, and go to state 5
+
+    EXPR  go to state 15
+    T     go to state 8
+    F     go to state 9
+
+
+State 5
+
+   13 F: '-' . F
+
+    IDENTIFIER  shift, and go to state 14
+    CONST       shift, and go to state 2
+    '('         shift, and go to state 4
+    '-'         shift, and go to state 5
+
+    F  go to state 16
+
+
+State 6
+
+    0 $accept: S . $end
+
+    $end  shift, and go to state 17
+
+
+State 7
+
+    1 S: EXPR . '\n'
+    6 EXPR: EXPR . '+' T
+    7     | EXPR . '-' T
+
+    '\n'  shift, and go to state 18
+    '+'   shift, and go to state 19
+    '-'   shift, and go to state 20
+
+
+State 8
+
+    8 EXPR: T .
+    9 T: T . '*' F
+   10  | T . '/' F
+
+    '*'  shift, and go to state 21
+    '/'  shift, and go to state 22
+
+    $default  reduce using rule 8 (EXPR)
+
+
+State 9
+
+   11 T: F .
+
+    $default  reduce using rule 11 (T)
+
+
+State 10
+
+    3 S: IDENTIFIER '\n' .
+
+    $default  reduce using rule 3 (S)
+
+
+State 11
+
+    4 S: IDENTIFIER '=' . EXPR '\n'
+
+    IDENTIFIER  shift, and go to state 14
+    CONST       shift, and go to state 2
+    '('         shift, and go to state 4
+    '-'         shift, and go to state 5
+
+    EXPR  go to state 23
+    T     go to state 8
+    F     go to state 9
+
+
+State 12
+
+    5 S: IDENTIFIER '(' . ')' '\n'
+
+    ')'  shift, and go to state 24
+
+
+State 13
+
+    2 S: QUIT '\n' .
+
+    $default  reduce using rule 2 (S)
+
+
+State 14
+
+   15 F: IDENTIFIER .
+
+    $default  reduce using rule 15 (F)
+
+
+State 15
+
+    6 EXPR: EXPR . '+' T
+    7     | EXPR . '-' T
+   12 F: '(' EXPR . ')'
+
+    ')'  shift, and go to state 25
+    '+'  shift, and go to state 19
+    '-'  shift, and go to state 20
+
+
+State 16
+
+   13 F: '-' F .
+
+    $default  reduce using rule 13 (F)
+
+
+State 17
+
+    0 $accept: S $end .
+
+    $default  accept
+
+
+State 18
+
+    1 S: EXPR '\n' .
+
+    $default  reduce using rule 1 (S)
+
+
+State 19
+
+    6 EXPR: EXPR '+' . T
+
+    IDENTIFIER  shift, and go to state 14
+    CONST       shift, and go to state 2
+    '('         shift, and go to state 4
+    '-'         shift, and go to state 5
+
+    T  go to state 26
+    F  go to state 9
+
+
+State 20
+
+    7 EXPR: EXPR '-' . T
+
+    IDENTIFIER  shift, and go to state 14
+    CONST       shift, and go to state 2
+    '('         shift, and go to state 4
+    '-'         shift, and go to state 5
+
+    T  go to state 27
+    F  go to state 9
+
+
+State 21
+
+    9 T: T '*' . F
+
+    IDENTIFIER  shift, and go to state 14
+    CONST       shift, and go to state 2
+    '('         shift, and go to state 4
+    '-'         shift, and go to state 5
+
+    F  go to state 28
+
+
+State 22
+
+   10 T: T '/' . F
+
+    IDENTIFIER  shift, and go to state 14
+    CONST       shift, and go to state 2
+    '('         shift, and go to state 4
+    '-'         shift, and go to state 5
+
+    F  go to state 29
+
+
+State 23
+
+    4 S: IDENTIFIER '=' EXPR . '\n'
+    6 EXPR: EXPR . '+' T
+    7     | EXPR . '-' T
+
+    '\n'  shift, and go to state 30
+    '+'   shift, and go to state 19
+    '-'   shift, and go to state 20
+
+
+State 24
+
+    5 S: IDENTIFIER '(' ')' . '\n'
+
+    '\n'  shift, and go to state 31
+
+
+State 25
+
+   12 F: '(' EXPR ')' .
+
+    $default  reduce using rule 12 (F)
+
+
+State 26
+
+    6 EXPR: EXPR '+' T .
+    9 T: T . '*' F
+   10  | T . '/' F
+
+    '*'  shift, and go to state 21
+    '/'  shift, and go to state 22
+
+    $default  reduce using rule 6 (EXPR)
+
+
+State 27
+
+    7 EXPR: EXPR '-' T .
+    9 T: T . '*' F
+   10  | T . '/' F
+
+    '*'  shift, and go to state 21
+    '/'  shift, and go to state 22
+
+    $default  reduce using rule 7 (EXPR)
+
+
+State 28
+
+    9 T: T '*' F .
+
+    $default  reduce using rule 9 (T)
+
+
+State 29
+
+   10 T: T '/' F .
+
+    $default  reduce using rule 10 (T)
+
+
+State 30
+
+    4 S: IDENTIFIER '=' EXPR '\n' .
+
+    $default  reduce using rule 4 (S)
+
+
+State 31
+
+    5 S: IDENTIFIER '(' ')' '\n' .
+
+    $default  reduce using rule 5 (S)

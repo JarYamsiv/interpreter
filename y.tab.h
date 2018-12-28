@@ -45,28 +45,55 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    IDENTIFIER = 258,
-    CONST = 259,
-    FUNCTIONCALL = 260,
-    QUIT = 261
+    IF = 258,
+    WHILE = 259,
+    FOR = 260,
+    AND = 261,
+    OR = 262,
+    NOT = 263,
+    EQ = 264,
+    GT = 265,
+    LS = 266,
+    GTE = 267,
+    LSE = 268,
+    NEQ = 269,
+    IDENTIFIER = 270,
+    CONST = 271,
+    FUNCTIONCALL = 272,
+    QUIT = 273,
+    LEX_ERROR_TOKEN = 274
   };
 #endif
 /* Tokens.  */
-#define IDENTIFIER 258
-#define CONST 259
-#define FUNCTIONCALL 260
-#define QUIT 261
+#define IF 258
+#define WHILE 259
+#define FOR 260
+#define AND 261
+#define OR 262
+#define NOT 263
+#define EQ 264
+#define GT 265
+#define LS 266
+#define GTE 267
+#define LSE 268
+#define NEQ 269
+#define IDENTIFIER 270
+#define CONST 271
+#define FUNCTIONCALL 272
+#define QUIT 273
+#define LEX_ERROR_TOKEN 274
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 19 "calc.y" /* yacc.c:1909  */
+#line 31 "calc.y" /* yacc.c:1909  */
 
   identifier id;
+  condition_block cond_block;
 
-#line 70 "y.tab.h" /* yacc.c:1909  */
+#line 97 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

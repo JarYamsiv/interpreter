@@ -1,5 +1,5 @@
 all:
-	yacc -d calc.y
-	lex	calc.l
-	gcc lex.yy.c y.tab.c -o calc
+	bison -d calc.y
+	flex --header-file=lex.h calc.l 
+	g++ lex.yy.c calc.tab.c -o calc -std=c++11
 	
