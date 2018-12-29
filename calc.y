@@ -41,7 +41,7 @@ int indent_level;
   condition_block cond_block;
 }
 
-%token <cond_block> IF WHILE FOR;
+%token <cond_block> IF ELSE WHILE FOR;
 %type <cond_block> CONDITIONS CONDITION
 %token AND OR NOT 
 %token EQ GT LT GTE LSE NEQ
@@ -136,6 +136,7 @@ CONDITION : EXPR EQ EXPR  {
   else if(t1==TYPE_FLOAT&&t2==TYPE_FLOAT)   {$$.val = ($<id.x.f>1 < $<id.x.f>3);}
   else                                      {return ERROR_TYPE_ERROR;}
   }
+          | '(' CONDITIONS ')'        {$$ = $2;}
           | TRUE                      {$$.val = 1;}
           | FALSE                     {$$.val = 0;}
           ;
@@ -297,7 +298,7 @@ int main() {
       if(stack_trigger == 1 && !code_stack.empty())
       {
         /*
-          loading to executions stack.. it will contain the truthnesds of the if statement on top
+          loading to executions stack.. it will contain the truthness of the if statement on top
         */
         while(!code_stack.empty())
         {

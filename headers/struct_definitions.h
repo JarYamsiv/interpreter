@@ -30,7 +30,7 @@
   }condition_block;
 
   typedef enum{
-    COM_STATEMENT,COM_IF_TRUE,COM_IF_FALSE
+    COM_STATEMENT,COM_IF_TRUE,COM_IF_FALSE,COM_ELSE
   }com_state;
 
   typedef struct{
